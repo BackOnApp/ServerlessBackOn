@@ -1,4 +1,5 @@
 const mongoInterface = require('../mongoInterface');
+const sendPush = require("public/sendPush.js")
 
 module.exports = (request, response) => {
   let id = request.body._id;
@@ -9,12 +10,16 @@ module.exports = (request, response) => {
   }
   mongoInterface.Task.findByIdAndUpdate(id, {'$set': {helperID : null}})
   .then(
-    () => {
-      response.send(200);
+    async (task) => {
+      await sendPush(task.neederID, 'Niente più aiuto per '.concat(task.title));
+      console.log('Task removed!')
+      response.status(200).json({"result":"Task removed!"});
     }
   ).catch(
     (error) => {
-      response.send(400);
+      console.error("Error with addTask");
+      console.error(error);
+      response.status(400).json(error);
     }
   );
 };
