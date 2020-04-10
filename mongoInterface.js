@@ -37,7 +37,9 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   photo: { type: String, required: true},
   devices: {
-            //type: Array, required: true
+           type: Map,
+           of:Date,
+           required: true
   }
 });
 userSchema.plugin(uniqueValidator);

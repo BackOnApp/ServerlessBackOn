@@ -2,30 +2,14 @@ const mongoInterface = require('../mongoInterface');
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = (request, response) => {
-  var user = new mongoInterface.User({
-    name: request.body.name,
-    surname: request.body.surname,
-    email: request.body.email,
-    photo: request.body.photo,
-    devices: {}
-  });
-  console.log("SSUICIDIO");
-  var tok=request.body("deviceToken");
-  user.devices[tok] = Date.now();
-  var dev = 'devices.'+ String.toString(tok);
-  console.log("OIOPPOpOP")
-  console.log(tok);
-  console.log("assaassaMA STIAMO SCHERZANDO " +dev+"\n\n\n\n\n\n\n\n")
-  var dt = Date.now();
-
-  if (user != null)
-    mongoInterface.User.findOne({email : user.email})
+  if(request.body._id){
+    mongoInterface.User.findById({_id : ObjectId(request.body._id)})
     .then(
       (existentuser) => {
         if (existentuser != null) {
-          console.log(existentuser+" already exists OMMIODIO"+dev+"OMIODIO")
-
-          mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { dev : dt}},
+          var mappini = existentuser.devices;
+          mappini.set(request.body.deviceToken, Date.now());
+          mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : mappini}},
           function (err, raw) {
             if (err) {
                 console.log('Error log: ' + err)
@@ -33,28 +17,9 @@ module.exports = (request, response) => {
                 console.log("Token updated: " + raw);
             }
           });
-          console.log("PISELLONE");
+
           response.status(200).json({_id: existentuser._id});
-          
-          user = null;
-        } else {
-          console.log("Registering "+user);
-          user.save()
-          .then(
-            result => {
-              console.log("Registered user: "+result);
-              response.status(200).json({
-                _id: result._id
-              });
-            }
-          )
-          .catch(err => {
-            console.error(err);
-            response.status(400).json({
-              "error": err
-            });
-          });
-        }
+        } 
       }
     )
     .catch(
@@ -65,10 +30,72 @@ module.exports = (request, response) => {
         });
       }
     );
-  else {
-    console.error("Error while creating User. Maybe there are missing fields in the request");
-    response.status(400).json({
-      "error": "Error while creating User. Maybe there are missing fields in the request"
+
+  }else{
+
+    var user = new mongoInterface.User({
+      name: request.body.name,
+      surname: request.body.surname,
+      email: request.body.email,
+      photo: request.body.photo,
+      devices: new Map()
     });
+    var tok=request.body.deviceToken;
+    user.devices.set(tok, Date.now());
+  
+    if (user != null)
+      mongoInterface.User.findOne({email : user.email})
+      .then(
+        (existentuser) => {
+          if (existentuser != null) {
+            var mappini = existentuser.devices;
+            mappini.set(tok, Date.now());
+            mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : mappini}},
+            function (err, raw) {
+              if (err) {
+                  console.log('Error log: ' + err)
+              } else {
+                  console.log("Token updated: " + raw);
+              }
+            });
+  
+            response.status(200).json({_id: existentuser._id});
+            
+            user = null;
+          } else {
+            console.log("Registering "+user);
+            user.save()
+            .then(
+              result => {
+                console.log("Registered user: "+result);
+                response.status(200).json({
+                  _id: result._id
+                });
+              }
+            )
+            .catch(err => {
+              console.error(err);
+              response.status(400).json({
+                "error": err
+              });
+            });
+          }
+        }
+      )
+      .catch(
+        (error) => {
+          console.error(error);
+          response.status(400).json({
+            "error": err
+          });
+        }
+      );
+    else {
+      console.error("Error while creating User. Maybe there are missing fields in the request");
+      response.status(400).json({
+        "error": "Error while creating User. Maybe there are missing fields in the request"
+      });
+    }
   }
+  
 };
