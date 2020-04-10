@@ -38,7 +38,7 @@ const userSchema = mongoose.Schema({
   photo: { type: String, required: true},
   devices: {
             //type: Array, required: true
-           }
+  }
 });
 userSchema.plugin(uniqueValidator);
 const soulSchema = mongoose.Schema({
