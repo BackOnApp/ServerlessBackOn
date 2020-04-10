@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BackOn</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="public/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="public/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="public/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="public/favicon-192x192.png">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        /* montserrat-regular - latin */
+        @font-face {
+        font-family: 'Montserrat';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Montserrat Regular'), local('Montserrat-Regular'),
+            url('public/montserrat-v14-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url('public/montserrat-v14-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+        }
+        html {
+            height: 100%;
+            margin: 0;
+            background-color: #EC9D3D;
+        }
+        body {
+            font-family: 'Montserrat';
+        }
+        .content {
+        color: white;
+        text-align: center;
+        }
+        .image {
+        width: 30%;
+        height: auto;
+        position: center;
+        }
+        .donateButton {
+        width: 20%;
+        height: auto;
+        position: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <br><br><br>
+        <img src="public/backonicon.png" alt="backonicon" class="image">
+        <br><br><br><br><br><br>
+        <p style="font-size:40px">BackOn</p>
+        <p style="font-size:20px">A project by Vincenzo Riccio, Giancarlo Sorrentino, Emanuele Triuzzi e Gennaro Zanfardino</p>
+        <p style="font-size:10px">P.S. Have you got €100 to promote our idea?</p>
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input type="hidden" name="cmd" value="_s-xclick" />
+            <input type="hidden" name="hosted_button_id" value="HNR9F7MCPPJ5L" />
+            <input type="image" src="public/donateButtonWhite.png" alt="donateButton" class="donateButton" title="Donate with PayPal - The safer, easier way to pay online!"/>
+        </form>
+       
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+{
+  "version": 2,
+  "builds": [{ "src": "api/*.js", "use": "@now/node", "config": {"includeFiles": ["public/**"]} },{ "src": "index.html", "use": "@now/static" },{ "src": "public/*", "use": "@now/static" }]
+}
