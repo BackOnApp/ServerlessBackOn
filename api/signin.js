@@ -7,6 +7,7 @@ module.exports = (request, response) => {
     .then(
       (existentuser) => {
         if (existentuser != null) {
+          if (request.body.deviceToken != ''){
           var mappini = existentuser.devices;
           mappini.set(request.body.deviceToken, Date.now());
           mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : mappini}},
@@ -17,7 +18,7 @@ module.exports = (request, response) => {
                 console.log("Token updated: " + raw);
             }
           });
-
+        }
           response.status(200).json({_id: existentuser._id});
         } 
       }
@@ -40,17 +41,16 @@ module.exports = (request, response) => {
       photo: request.body.photo,
       devices: new Map()
     });
-    var tok=request.body.deviceToken;
-    user.devices.set(tok, Date.now());
+    var token=request.body.deviceToken;
   
     if (user != null)
       mongoInterface.User.findOne({email : user.email})
       .then(
         (existentuser) => {
           if (existentuser != null) {
-            var mappini = existentuser.devices;
-            mappini.set(tok, Date.now());
-            mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : mappini}},
+            if(token != ''){
+            existentuser.devices.set(token, Date.now());
+            mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
             function (err, raw) {
               if (err) {
                   console.log('Error log: ' + err)
@@ -58,12 +58,15 @@ module.exports = (request, response) => {
                   console.log("Token updated: " + raw);
               }
             });
-  
+          }
             response.status(200).json({_id: existentuser._id});
             
             user = null;
           } else {
             console.log("Registering "+user);
+            if (token != ''){
+              user.devices.set(token, Date.now());
+            }
             user.save()
             .then(
               result => {
