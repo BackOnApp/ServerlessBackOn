@@ -40,18 +40,17 @@ const userSchema = mongoose.Schema({
 });
 userSchema.plugin(uniqueValidator);
 const soulSchema = mongoose.Schema({
-  timeinvestor: { type: Double, required: true},
-  resourceful: { type: Double, required: true},
-  longrunner: { type: Double, required: true},
-  petlover: { type: Double, required: true},
-  socialbeast: { type: Double, required: true},
-  helped: { type: Number, required: true},
-  unsolved: { type: Number, required: true},
-  solved: { type: Number, required: true},
-  thumbsup: { type: Number, required: true},
-  thumbsupgiven: { type: Number, required: true},
-  thumbsdown: { type: Number, required: true},
-  thumbsdowngiven: { type: Number, required: true}
+  caregiver: { type: Double, default: 0, required: true},
+  housewife: { type: Double, default: 0, required: true},
+  runner: { type: Double, default: 0, required: true},
+  smartassistant: { type: Double, default: 0, required: true},
+  helped: { type: Number, default: 0, required: true},
+  unsolved: { type: Number, default: 0, required: true},
+  solved: { type: Number, default: 0, required: true},
+  thumbsup: { type: Number, default: 0, required: true},
+  thumbsupgiven: { type: Number, default: 0, required: true},
+  thumbsdown: { type: Number, default: 0, required: true},
+  thumbsdowngiven: { type: Number, default: 0, required: true}
 });
 const stashedTaskSchema = mongoose.Schema({
   title: { type: String, required: true },  

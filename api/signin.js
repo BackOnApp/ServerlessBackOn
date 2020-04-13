@@ -5,7 +5,10 @@ module.exports = (request, response) => {
     if(request.body._id){
         mongoInterface.User.findById({_id : ObjectId(request.body._id)})
         .then(
-              (existentuser) => {
+            (existentuser) => {
+            mongoInterface.Soul.findById({_id : ObjectId(request.body._id)})
+            .then(
+              (userSoul) => {
             if (existentuser != null) {
                 if (request.body.deviceToken){
                     existentuser.devices.set(request.body.deviceToken, Date.now());
@@ -22,12 +25,17 @@ module.exports = (request, response) => {
                     {
                         name: existentuser.name,
                         surname: existentuser.surname,
-                        photo: existentuser.photo
+                        photo: existentuser.photo,
+                        caregiver: userSoul.caregiver,
+                        housewife: userSoul.housewife,
+                        runner: userSoul.runner,
+                        smartassistant: userSoul.smartassistant
                     }
                 );
             } 
         }
-              )
+            )}
+        )
         .catch(
                (error) => {
             console.error(error);
@@ -76,11 +84,16 @@ module.exports = (request, response) => {
                     .then(
                           result => {
                         console.log("Registered user: "+result);
-                        response.status(200).json({
-                        _id: result._id
-                        });
-                    }
+                        new mongoInterface.Soul({_id: result._id}).save()
+                        .then(
+                            () =>{
+                                response.status(200).json({
+                                    _id: result._id
+                            });
+                            
+                        }
                           )
+                        })
                     .catch(err => {
                         console.error(err);
                         response.status(400).json({
