@@ -7,7 +7,7 @@ module.exports = (request, response) => {
         .then(
               (existentuser) => {
             if (existentuser != null) {
-                if (request.body.deviceToken != ''){
+                if (request.body.deviceToken){
                     existentuser.devices.set(request.body.deviceToken, Date.now());
                     mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
                                                   function (err, raw) {
@@ -18,7 +18,13 @@ module.exports = (request, response) => {
                         }
                     });
                 }
-                response.status(200).json({_id: existentuser._id});
+                response.status(200).json(
+                    {
+                        name: existentuser.name,
+                        surname: existentuser.surname,
+                        photo: existentuser.photo
+                    }
+                );
             } 
         }
               )

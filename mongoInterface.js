@@ -33,7 +33,7 @@ const taskSchema = mongoose.Schema({
 });
 const userSchema = mongoose.Schema({
   name: { type: String, required: true},
-  surname: { type: String, required: true},
+  surname: { type: String, required: false},
   email: { type: String, required: true, unique: true },
   photo: { type: String, required: true},
   devices: { type: Map, of:Date, required: true }
