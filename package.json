@@ -9,13 +9,15 @@
   "license": "ISC",
   "dependencies": {
     "@mongoosejs/double": "^0.2.0",
+    "apn": "^2.2.0",
     "bcrypt": "^4.0.1",
     "fs": "^0.0.1-security",
     "googleapis": "^39.2.0",
     "mongoose": "^5.8.12",
     "mongoose-unique-validator": "^2.0.3",
     "now": "^17.1.1",
-    "apn": "^2.2.0"
+    "streamifier": "^0.1.1"
+    
   },
   "description": ""
 }
