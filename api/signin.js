@@ -13,9 +13,9 @@ module.exports = (request, response) => {
                 if (request.body.deviceToken){
                     existentuser.devices.set(request.body.deviceToken, Date.now());
                     mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
-                                                  function (err, raw) {
-                        if (err) {
-                            console.log('Error log: ' + err)
+                                                  function (error, raw) {
+                        if (error) {
+                            console.log('Error log: ' + error)
                         } else {
                             console.log("Token updated: " + raw);
                         }
@@ -40,7 +40,7 @@ module.exports = (request, response) => {
                (error) => {
             console.error(error);
             response.status(400).json({
-                "error": err
+                "error": error
             });
         }
                );
@@ -61,12 +61,12 @@ module.exports = (request, response) => {
             .then(
                   (existentuser) => {
                 if (existentuser != null) {
-                    if(token != ''){
+                    if(token != null){
                         existentuser.devices.set(token, Date.now());
                         mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
-                                                      function (err, raw) {
-                            if (err) {
-                                console.log('Error log: ' + err)
+                                                      function (error, raw) {
+                            if (error) {
+                                console.log('Error log: ' + error)
                             } else {
                                 console.log("Token updated: " + raw);
                             }
@@ -94,10 +94,10 @@ module.exports = (request, response) => {
                         }
                           )
                         })
-                    .catch(err => {
-                        console.error(err);
+                    .catch(error => {
+                        console.error(error);
                         response.status(400).json({
-                            "error": err
+                            "error": error
                         });
                     });
                 }
@@ -107,7 +107,7 @@ module.exports = (request, response) => {
                    (error) => {
                 console.error(error);
                 response.status(400).json({
-                    "error": err
+                    "error": error
                 });
             }
                    );
