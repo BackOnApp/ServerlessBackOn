@@ -77,7 +77,7 @@ module.exports = (request, response) => {
                     user = null;
                 } else {
                     console.log("Registering "+user);
-                    if (token != ''){
+                    if (token != null){
                         user.devices.set(token, Date.now());
                     }
                     user.save()
