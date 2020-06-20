@@ -24,14 +24,22 @@ module.exports = (request, response) => {
   }
 
   if (body.logoutToken){
+      console.log("Ci sono entrato, provo a rimuovere il token")
       mongoInterface.User.findById({_id : ObjectId(body._id)})
         .then(
             (existentuser) => {
+              console.log("Ho trovato l'utente")
               existentuser.devices.delete(body.logoutToken);
+              console.log("Dispositivi:")
+              console.log(existentuser.devices.get('bar'))
               mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
                                                   function (error, raw) {
                         if (error) {
+                            console.log("Ho trovato l'errore")
                             console.log('Error log: ' + error)
+                            response.status(400).json({
+                              "error": error
+                            });
                         } else {
                             console.log("Token deleted: " + raw);
                         }
