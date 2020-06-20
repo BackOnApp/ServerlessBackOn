@@ -26,13 +26,13 @@ module.exports = (request, response) => {
   if (body.logoutToken){
       console.log("Ci sono entrato, provo a rimuovere il token. Id utente: ")
       console.log(body._id)
-      mongoInterface.User.findById({_id : body._id})
+      mongoInterface.User.findById({_id : ObjectId(body._id)})
         .then(
             (existentuser) => {
               console.log("Ho trovato l'utente")
-              existentuser.devices.delete(body.logoutToken);
+              /*existentuser.devices.delete(body.logoutToken);
               console.log("Dispositivi:")
-              console.log(existentuser.devices.get('bar'))
+              console.log(existentuser.devices.get(body.logoutToken))
               mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
                                                   function (error, raw) {
                         if (error) {
@@ -44,7 +44,7 @@ module.exports = (request, response) => {
                         } else {
                             console.log("Token deleted: " + raw);
                         }
-                    });
+                    });*/
             }
         ).catch(
           (error) => {
