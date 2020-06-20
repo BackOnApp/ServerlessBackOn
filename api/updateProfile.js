@@ -24,7 +24,8 @@ module.exports = (request, response) => {
   }
 
   if (body.logoutToken){
-      console.log("Ci sono entrato, provo a rimuovere il token")
+      console.log("Ci sono entrato, provo a rimuovere il token. Id utente: ")
+      console.log(body._id)
       mongoInterface.User.findById({_id : ObjectId(body._id)})
         .then(
             (existentuser) => {
