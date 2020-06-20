@@ -17,7 +17,6 @@
     "mongoose-unique-validator": "^2.0.3",
     "now": "^17.1.1",
     "streamifier": "^0.1.1"
-    
   },
   "description": ""
 }
