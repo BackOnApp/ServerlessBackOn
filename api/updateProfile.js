@@ -26,11 +26,11 @@ module.exports = (request, response) => {
   if (body.logoutToken){
       console.log("Ci sono entrato, provo a rimuovere il token. Id utente: ")
       console.log(body._id)
-      mongoInterface.User.findById({_id : ObjectId(body._id)})
+      mongoInterface.User.findById({_id : ObjectId("5e9c3b54a1e68b00077880e0")})
         .then(
             (existentuser) => {
               console.log("Ho trovato l'utente")
-              /*existentuser.devices.delete(body.logoutToken);
+              existentuser.devices.delete(body.logoutToken);
               console.log("Dispositivi:")
               console.log(existentuser.devices.get(body.logoutToken))
               mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
@@ -44,19 +44,17 @@ module.exports = (request, response) => {
                         } else {
                             console.log("Token deleted: " + raw);
                         }
-                    });*/
+                    });
             }
         ).catch(
           (error) => {
             console.error(error);
             response.send(400);
-            return;
           }
         );
       response.send(200);
-      return;
   }
-
+  else {
   if(body.photo){
 
     // configure a JWT auth client
@@ -128,5 +126,5 @@ module.exports = (request, response) => {
     
   }
   
-
+  }
 }
