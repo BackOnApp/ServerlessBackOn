@@ -23,6 +23,33 @@ module.exports = (request, response) => {
     return;
   }
 
+  if (body.logoutToken){
+      mongoInterface.User.findById({_id : ObjectId(body._id)})
+        .then(
+            (existentuser) => {
+              existentuser.devices.delete(body.logoutToken);
+              mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
+                                                  function (error, raw) {
+                        if (error) {
+                            console.log('Error log: ' + error)
+                        } else {
+                            console.log("Token deleted: " + raw);
+                        }
+                    });
+            }
+        ).catch(
+          (error) => {
+            console.error(error);
+            response.status(400).json({
+                "error": error
+              });
+            return;
+          }
+        );
+      response.send(200);
+      return;
+  }
+
   if(body.photo){
 
     // configure a JWT auth client
