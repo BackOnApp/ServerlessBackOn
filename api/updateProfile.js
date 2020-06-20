@@ -26,7 +26,16 @@ module.exports = (request, response) => {
   if (body.logoutToken){
       console.log("Ci sono entrato, provo a rimuovere il token. Id utente: ")
       console.log(body._id)
-      mongoInterface.User.findById({_id : "5e9c3b54a1e68b00077880e0"})
+      mongoInterface.User.findByIdAndUpdate({_id : ObjectId(body._id)}, { '$set': { name : "Gian", surname : "Carlo"} }, {new: true}).then(
+        () => {
+          response.send(200)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : ""});
+        }
+    ).catch(
+        (error) => {
+          response.send(400)//.json({"error" : error,'name' : "" , 'surname' : "" , "photoURL" : ""});
+        }
+    );
+      /*mongoInterface.User.findById({_id : ObjectId("5e9c3b54a1e68b00077880e0")})
         .then(
             (existentuser) => {
               console.log("Ho trovato l'utente")
@@ -53,6 +62,7 @@ module.exports = (request, response) => {
           }
         );
       response.send(200);
+      */
   }
   else {
   if(body.photo){
