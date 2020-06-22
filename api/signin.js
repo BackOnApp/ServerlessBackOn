@@ -10,6 +10,7 @@ module.exports = (request, response) => {
             .then(
               (userSoul) => {
             if (existentuser != null) {
+                //Existent user
                 if (request.body.deviceToken){
                     existentuser.devices.set(request.body.deviceToken, Date.now());
                     mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
@@ -26,6 +27,7 @@ module.exports = (request, response) => {
                         name: existentuser.name,
                         surname: existentuser.surname,
                         photo: existentuser.photo,
+                        phoneNumber: existentuser.phoneNumber,
                         caregiver: userSoul.caregiver,
                         housewife: userSoul.housewife,
                         runner: userSoul.runner,
@@ -46,13 +48,14 @@ module.exports = (request, response) => {
                );
         
     }else{
-        
+        //New User
         var user = new mongoInterface.User({
         name: request.body.name,
         surname: request.body.surname,
         email: request.body.email,
         photo: request.body.photo,
-        devices: new Map()
+        devices: new Map(),
+        phoneNumber: request.body.phone_number
         });
         var token=request.body.deviceToken;
         

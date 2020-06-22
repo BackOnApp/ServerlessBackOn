@@ -30,7 +30,7 @@ module.exports = (request, response) => {
         (existentuser) => {
           existentuser.devices.delete(body.logoutToken);
           mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
-                                                  function (error, raw) {
+                          function (error, raw) {
                         if (error) {
                             console.log('Error log: ' + error)
                             response.status(400).json({
@@ -108,7 +108,7 @@ module.exports = (request, response) => {
         }
     });
   }else if(body.name&&body.surname&&!body.photo){
-    mongoInterface.User.findByIdAndUpdate({_id : ObjectId(body._id)}, { '$set': { name : body.name, surname : body.surname} }, {new: true}).then(
+    mongoInterface.User.findByIdAndUpdate({_id : ObjectId(body._id)}, { '$set': { name : body.name, surname : body.surname, phoneNumber : body.phoneNumber} }, {new: true}).then(
         () => {
           response.send(401)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : ""});
         }

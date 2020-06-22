@@ -36,7 +36,8 @@ const userSchema = mongoose.Schema({
   surname: { type: String, required: false},
   email: { type: String, required: true, unique: true },
   photo: { type: String, required: true},
-  devices: { type: Map, of:Date, required: true }
+  devices: { type: Map, of:Date, required: true },
+  phoneNumber: { type: String, required: false }
 });
 userSchema.plugin(uniqueValidator);
 const soulSchema = mongoose.Schema({
