@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
   name: { type: String, required: true},
   surname: { type: String, required: false},
   email: { type: String, required: true, unique: true },
-  photo: { type: String, required: true},
+  photo: { type: String, required: false},
   devices: { type: Map, of:Date, required: true },
   phoneNumber: { type: String, required: false }
 });

@@ -53,15 +53,15 @@ module.exports = (request, response) => {
     // Preparo mano mano il JSON di modifiche da apportare alla entry su MongoDB
     changes = {}
 
-    if (body.name) {
+    if ("name" in body) {
       changes["name"] = body.name
     }
 
-    if (body.surname) {
+    if ("surname" in body) {
       changes["surname"] = body.surname
     }
 
-    if (body.phoneNumber) {
+    if ("phoneNumber" in body) {
       changes["phoneNumber"] = body.phoneNumber
     }
 
@@ -112,13 +112,13 @@ module.exports = (request, response) => {
     if (changes != {}) {
       mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
            () => {
-             console.log('Successfully updated database entry!')
-             response.send(200)
+            console.log('Successfully updated database entry!')
+            response.send(200)
            }
       ).catch(
            (error) => {
-             console.error('Eror while updating database entry: ' + error)
-             response.send(400)
+            console.error('Eror while updating database entry: ' + error)
+            response.send(400)
            }
        );
     }
