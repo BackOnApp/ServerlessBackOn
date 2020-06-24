@@ -109,13 +109,15 @@ module.exports = (request, response) => {
     }
     
     //Se ci sono modifiche, le effettuo
-    if (changes) {
+    if (changes != {}) {
       mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
            () => {
+             console.log('Successfully updated database entry!')
              response.send(200)
            }
       ).catch(
            (error) => {
+             console.error('Eror while updating database entry: ' + error)
              response.send(400)
            }
        );
