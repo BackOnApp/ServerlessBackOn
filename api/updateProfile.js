@@ -11,7 +11,6 @@ const streamifier = require('streamifier');
 
 // in privatekey ci va il json dell'account di servizio dopo averlo esteso a tutto il dominio
 let privatekey = require('public/g_serviceAccCred.json');
-
 const mongoInterface = require('../mongoInterface');
 
 module.exports = (request, response) => {
@@ -48,77 +47,78 @@ module.exports = (request, response) => {
         }
     );
   }
+
+
   else {
-  if(body.photo){
+    // Preparo mano mano il JSON di modifiche da apportare alla entry su MongoDB
+    changes = null
 
-    // configure a JWT auth client
-    let jwtClient = new google.auth.JWT(privatekey.client_email, null, privatekey.private_key, 'https://www.googleapis.com/auth/drive');
-    //authenticate request
-    jwtClient.authorize(function (err, tokens) {
-        if (err) {
-            console.error(err);
-            response.send(400)
-            return;
-        }
-    });
+    if (body.name) {
+      changes['name'] = body.name
+    }
 
-    const drive = google.drive({version: 'v3'});
+    if (body.surname) {
+      changes['surname'] = body.surname
+    }
 
-    var filename=`${body._id}.jpeg`;
+    if (body.phoneNumber) {
+      changes['phoneNumber'] = body.phoneNumber
+    }
+
+    if(body.photo) {
+      // Configure a JWT auth client
+      let jwtClient = new google.auth.JWT(privatekey.client_email, null, privatekey.private_key, 'https://www.googleapis.com/auth/drive');
+      // Authenticate request
+      jwtClient.authorize(function (err, tokens) {
+          if (err) {
+              console.error(err);
+              response.send(400)
+              return;
+          }
+      });
+
+      const drive = google.drive({version: 'v3'});
+      var filename=`${body._id}.jpeg`;
+      
+      const fileMetadata = {
+          'name': filename, 
+          //id della cartella condivisa (altrimenti salva nel drive del service account)
+          'parents':["1hHgPhnUFIXZBcZe4-LynuO8NZkDh0VXV"] 
+      };
+
+      var buf = Buffer.from(body.photo, 'base64');
+
+      const media = {
+          mimeType: 'image/jpeg',
+          body: streamifier.createReadStream(buf)
+      };
+
+      var dllink = null
+      drive.files.create({resource: fileMetadata, media: media, fields: 'id', auth: jwtClient }, (err, file) => {
+          if (err) {
+              console.error('Error while uploading picture on Google drive: ' + err);
+          } else {
+              let fileid = file.data.id; 
+              //Attenzione: Il fileid non è corrispondente al nome del file, perciò conserviamo le foto di tutti anche quando vengono sostituite con altre
+              console.log('Uploaded a file with ID: ', fileid);
+              dllink = "https://drive.google.com/uc?export=download&id=" + fileid;
+              //Inserisco nei cambiamenti il link da salvare sul db
+              changes['photo'] = dllink
+          }
+      });
+    }
     
-    const fileMetadata = {
-        'name': filename, 
-        'parents':["1hHgPhnUFIXZBcZe4-LynuO8NZkDh0VXV"] // id della cartella condivisa (altrimenti salva nel drive del service account)
-    };
-
-
-    var buf = Buffer.from(body.photo, 'base64');
-
-    const media = {
-        mimeType: 'image/jpeg',
-        body: streamifier.createReadStream(buf)
-    };
-
-    var fileid = "";
-    drive.files.create({resource: fileMetadata, media: media, fields: 'id', auth: jwtClient }, (err, file) => {
-        if (body.name&&body.surname&&err) {
-            console.error(err);
-            mongoInterface.User.updateOne({_id : ObjectId(body._id)}, { '$set': { 'name' : body.name , 'surname' : body.surname} } , {new: true}).then(
-              () => {
-                response.send(401)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : ""});
-              }
-            ).catch(
-              (error) => {
-                response.send(400)//.json({"err": err, "error" : error, 'name' : "" , 'surname' : "" , "photoURL" : ""});
-              }
-            );
-        } else {
-            fileid = file.data.id;
-            console.log('Uploaded a file with ID: ', fileid);
-            let dllink = "https://drive.google.com/uc?export=download&id="+fileid;
-            mongoInterface.User.updateOne({_id : ObjectId(body._id)}, { '$set': { 'name' : body.name , 'surname' : body.surname , 'photo' : dllink} }).then(
-              () => {
-                response.send(200)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : dllink});
-              }
-            ).catch(
-              (error) => {
-                response.send(400)//.json({"error" : error,'name' : "" , 'surname' : "" , "photoURL" : ""});
-              }
-            );
-        }
-    });
-  }else if(body.name&&body.surname&&!body.photo){
-    mongoInterface.User.updateOne({_id : ObjectId(body._id)}, { '$set': { 'name' : body.name, 'surname' : body.surname, 'phoneNumber' : body.phoneNumber} }, {new: true}).then(
-        () => {
-          response.send(401)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : ""});
-        }
-    ).catch(
-        (error) => {
-          response.send(400)//.json({"error" : error,'name' : "" , 'surname' : "" , "photoURL" : ""});
-        }
-    );
-    
-  }
-  
+    //Se ci sono modifiche, le effettuo
+    if (changes) {
+      mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
+           () => {
+             response.send(200)
+           }
+      ).catch(
+           (error) => {
+             response.send(400)
+           }
+       );
+    }
   }
 }
