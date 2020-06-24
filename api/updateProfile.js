@@ -51,18 +51,18 @@ module.exports = (request, response) => {
 
   else {
     // Preparo mano mano il JSON di modifiche da apportare alla entry su MongoDB
-    changes = null
+    changes = {}
 
     if (body.name) {
-      changes['name'] = body.name
+      changes["name"] = body.name
     }
 
     if (body.surname) {
-      changes['surname'] = body.surname
+      changes["surname"] = body.surname
     }
 
     if (body.phoneNumber) {
-      changes['phoneNumber'] = body.phoneNumber
+      changes["phoneNumber"] = body.phoneNumber
     }
 
     if(body.photo) {
@@ -103,7 +103,7 @@ module.exports = (request, response) => {
               console.log('Uploaded a file with ID: ', fileid);
               dllink = "https://drive.google.com/uc?export=download&id=" + fileid;
               //Inserisco nei cambiamenti il link da salvare sul db
-              changes['photo'] = dllink
+              changes["photo"] = dllink
           }
       });
     }
