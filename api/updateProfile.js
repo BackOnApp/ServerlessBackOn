@@ -108,7 +108,7 @@ module.exports = (request, response) => {
         }
     });
   }else if(body.name&&body.surname&&!body.photo){
-    mongoInterface.User.findByIdAndUpdate({_id : ObjectId(body._id)}, { '$set': { 'name' : body.name, 'surname' : body.surname, 'phoneNumber' : body.phoneNumber} }, {new: true}).then(
+    mongoInterface.User.updateOne({_id : ObjectId(body._id)}, { '$set': { 'name' : body.name, 'surname' : body.surname, 'phoneNumber' : body.phoneNumber} }, {new: true}).then(
         () => {
           response.send(401)//.json({'name' : body.name , 'surname' : body.surname , "photoURL" : ""});
         }
