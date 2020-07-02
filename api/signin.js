@@ -29,7 +29,7 @@ module.exports = (request, response) => {
                         photo: existentuser.photo,
                         phoneNumber: existentuser.phoneNumber,
                         caregiver: userSoul.caregiver,
-                        housewife: userSoul.housewife,
+                        housekeeper: userSoul.housekeeper,
                         runner: userSoul.runner,
                         smartassistant: userSoul.smartassistant
                     }

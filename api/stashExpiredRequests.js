@@ -78,7 +78,7 @@ module.exports = async (request, response) => {
               break;
           }
           
-          mongoInterface.Soul.findOneAndUpdate({_id : taskToStash.helperID}, {$inc : {helped : 1, thumbsup : helperMultiplier == 2 ? 1 : 0, thumbsdown : helperMultiplier == -1 ? 1 : 0, thumbsupgiven : neederMultiplier == 2 ? 1 : 0, thumbsdowngiven : neederMultiplier == -1 ? 1 : 0, caregiver : helperMultiplier * dictionary[title][0], housewife : helperMultiplier * dictionary[title][1], runner : helperMultiplier * dictionary[title][2], smartassistant : helperMultiplier * dictionary[title][3] }}).exec()
+          mongoInterface.Soul.findOneAndUpdate({_id : taskToStash.helperID}, {$inc : {helped : 1, thumbsup : helperMultiplier == 2 ? 1 : 0, thumbsdown : helperMultiplier == -1 ? 1 : 0, thumbsupgiven : neederMultiplier == 2 ? 1 : 0, thumbsdowngiven : neederMultiplier == -1 ? 1 : 0, caregiver : helperMultiplier * dictionary[title][0], housekeeper : helperMultiplier * dictionary[title][1], runner : helperMultiplier * dictionary[title][2], smartassistant : helperMultiplier * dictionary[title][3] }}).exec()
           mongoInterface.Soul.findOneAndUpdate({_id : taskToStash.neederID}, {$inc : {solved : 1, thumbsup : neederMultiplier == 2 ? 1 : 0, thumbsdown : neederMultiplier == -1 ? 1 : 0, thumbsupgiven : helperMultiplier == 2 ? 1 : 0, thumbsdowngiven : helperMultiplier == -1 ? 1 : 0}}).exec()
           
         }

@@ -42,7 +42,7 @@ const userSchema = mongoose.Schema({
 userSchema.plugin(uniqueValidator);
 const soulSchema = mongoose.Schema({
   caregiver: { type: Double, default: 0, required: true},
-  housewife: { type: Double, default: 0, required: true},
+  housekeeper: { type: Double, default: 0, required: true},
   runner: { type: Double, default: 0, required: true},
   smartassistant: { type: Double, default: 0, required: true},
   helped: { type: Number, default: 0, required: true},
