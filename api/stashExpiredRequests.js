@@ -68,16 +68,13 @@ module.exports = async (request, response) => {
           switch(neederReport) {
             case null:
               neederMultiplier = 1
-              mongoInterface.Soul.findOneAndUpdate({_id :taskToStash.neederID}, {$inc : {solved : 1}}).exec()
               break;
             case "Thank you!":
               neederMultiplier = 2
-              mongoInterface.Soul.findOneAndUpdate({_id :taskToStash.neederID}, {$inc : {solved : 1}}).exec()
               break;
             case "Didn't show up":
             case "Bad manners":
               neederMultiplier = -1
-              mongoInterface.Soul.findOneAndUpdate({_id :taskToStash.neederID}, {$inc : {solved : 1}}).exec()
               break;
           }
           
