@@ -40,8 +40,7 @@ module.exports = async (request, response) => {
           description: element["description"],
           neederID: ObjectId(element["neederID"]),
           date: element["date"],
-          latitude: element["latitude"],
-          longitude: element["longitude"],
+          location: element["location"],
           helperID: helper,
           helperReport: helperReport,
           neederReport: neederReport

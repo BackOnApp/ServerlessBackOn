@@ -7,8 +7,7 @@ module.exports = (request, response) => {
     description: request.body.description,
     neederID: ObjectId(request.body.neederID),
     date: request.body.date,
-    latitude: request.body.latitude,
-    longitude: request.body.longitude,
+    location: {type: "Point", coordinates: [request.body.longitude, request.body.latitude]},
     helperID: null,
     helperReport: null,
     neederReport: null

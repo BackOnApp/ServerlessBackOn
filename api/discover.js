@@ -12,16 +12,20 @@ module.exports = (request, response) => {
   }
   mongoInterface.Task.aggregate([
     {
+      $geoNear: {
+        near: { type: "Point", coordinates: [ request.body.longitude, request.body.latitude] },
+        spherical: true,
+        query: { helperID: null, neederID: {$ne : ObjectId(id)} },
+        distanceField: "distance",
+        maxDistance: 7500
+     }
+    },
+    {
       $lookup: {
           from: "users",
           localField: "neederID",
           foreignField: "_id",
           as: "user"
-      }
-    },
-    {
-      $match: {
-          helperID: null, neederID: {$ne : ObjectId(id)}
       }
     }
   ])
@@ -32,6 +36,7 @@ module.exports = (request, response) => {
   )
   .catch(
     (error) => {
+      console.log(error)
       response.status(400).json({
         error: error
       });
