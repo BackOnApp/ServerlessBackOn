@@ -101,7 +101,7 @@ module.exports = (request, response) => {
                 resolve('cannotUpdatePicture')
             } else {
                 //Attenzione: Il fileid non è corrispondente al nome del file, perciò conserviamo le foto di tutti anche quando vengono sostituite con altre
-                console.log('Uploaded a file with ID: ', fileid);
+                console.log('Uploaded a file with ID: ', file.data.id);
                 //Inserisco nei cambiamenti il link da salvare sul db
                 changes["photo"] = "https://drive.google.com/uc?export=download&id=" + file.data.id;
                 resolve('pictureUpdated')
