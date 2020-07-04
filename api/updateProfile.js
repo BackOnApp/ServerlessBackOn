@@ -65,62 +65,66 @@ module.exports = (request, response) => {
       changes["phoneNumber"] = body.phoneNumber
     }
 
-    if(body.photo) {
-      // Configure a JWT auth client
-      let jwtClient = new google.auth.JWT(privatekey.client_email, null, privatekey.private_key, 'https://www.googleapis.com/auth/drive');
-      // Authenticate request
-      jwtClient.authorize(function (err, tokens) {
-          if (err) {
-              console.error(err);
+    new Promise((resolve) => {
+      if(body.photo) {
+        // Configure a JWT auth client
+        let jwtClient = new google.auth.JWT(privatekey.client_email, null, privatekey.private_key, 'https://www.googleapis.com/auth/drive');
+        // Authenticate request
+        jwtClient.authorize(function (err, tokens) {
+            if (err) {
+                console.error(err);
+                response.send(400)
+                return;
+            }
+        });
+
+        const drive = google.drive({version: 'v3'});
+        var filename=`${body._id}.jpeg`;
+        
+        const fileMetadata = {
+            'name': filename, 
+            //id della cartella condivisa (altrimenti salva nel drive del service account)
+            'parents':["1hHgPhnUFIXZBcZe4-LynuO8NZkDh0VXV"] 
+        };
+
+        var buf = Buffer.from(body.photo, 'base64');
+
+        const media = {
+            mimeType: 'image/jpeg',
+            body: streamifier.createReadStream(buf)
+        };
+
+        var dllink = null
+        drive.files.create({resource: fileMetadata, media: media, fields: 'id', auth: jwtClient }, (err, file) => {
+            if (err) {
+                console.error('Error while uploading picture on Google drive: ' + err);
+                resolve('cannotUpdatePicture')
+            } else {
+                //Attenzione: Il fileid non è corrispondente al nome del file, perciò conserviamo le foto di tutti anche quando vengono sostituite con altre
+                console.log('Uploaded a file with ID: ', fileid);
+                //Inserisco nei cambiamenti il link da salvare sul db
+                changes["photo"] = "https://drive.google.com/uc?export=download&id=" + file.data.id;
+                resolve('pictureUpdated')
+            }
+        });
+
+      }
+      else resolve('noPictureToUpdate')
+    }).then(() => {
+      console.log(changes)
+      if (changes != {}) {
+        mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
+             (resolveMessage) => {
+              console.log('Successfully updated database entry!')
+              response.send(200)
+             }
+        ).catch(
+             (error) => {
+              console.error('Eror while updating database entry: ' + error)
               response.send(400)
-              return;
-          }
-      });
-
-      const drive = google.drive({version: 'v3'});
-      var filename=`${body._id}.jpeg`;
-      
-      const fileMetadata = {
-          'name': filename, 
-          //id della cartella condivisa (altrimenti salva nel drive del service account)
-          'parents':["1hHgPhnUFIXZBcZe4-LynuO8NZkDh0VXV"] 
-      };
-
-      var buf = Buffer.from(body.photo, 'base64');
-
-      const media = {
-          mimeType: 'image/jpeg',
-          body: streamifier.createReadStream(buf)
-      };
-
-      var dllink = null
-      drive.files.create({resource: fileMetadata, media: media, fields: 'id', auth: jwtClient }, (err, file) => {
-          if (err) {
-              console.error('Error while uploading picture on Google drive: ' + err);
-          } else {
-              let fileid = file.data.id; 
-              //Attenzione: Il fileid non è corrispondente al nome del file, perciò conserviamo le foto di tutti anche quando vengono sostituite con altre
-              console.log('Uploaded a file with ID: ', fileid);
-              dllink = "https://drive.google.com/uc?export=download&id=" + fileid;
-              //Inserisco nei cambiamenti il link da salvare sul db
-              changes["photo"] = dllink
-          }
-      });
-    }
-    
-    //Se ci sono modifiche, le effettuo
-    if (changes != {}) {
-      mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
-           () => {
-            console.log('Successfully updated database entry!')
-            response.send(200)
-           }
-      ).catch(
-           (error) => {
-            console.error('Eror while updating database entry: ' + error)
-            response.send(400)
-           }
-       );
-    }
+             }
+         );
+      }
+    });
   }
 }
