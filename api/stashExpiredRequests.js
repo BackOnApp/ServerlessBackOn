@@ -14,7 +14,7 @@ var dictionary = {
   "Study Support" : [3, 0, 0, 7],
   "Tech Assistance" : [2, 0, 0, 8],
   "Wheelchair Transport" : [6.5, 0, 3.5, 0],
-  "Other...": [2.5, 2.5, 2.5, 2.5]
+  "Other..." : [2.5, 2.5, 2.5, 2.5]
 }
 
 //check server date system consistency
@@ -34,7 +34,6 @@ module.exports = async (request, response) => {
         var title = element["title"]
         var helperReport = element["helperReport"]
         var neederReport = element["neederReport"]
-
         let taskToStash = new mongoInterface.StashedTask({
           _id: ObjectId(element["_id"]),
           title: title,  
