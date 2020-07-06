@@ -11,11 +11,17 @@ module.exports = (request, response) => {
         });
         return;
     }
-    mongoInterface.Task.findByIdAndUpdate(id, { '$set': { helperID : ObjectId(idHelper)} })
+    mongoInterface.Task.findOneAndUpdate({_id: id, helperID : null}, { $set: { helperID : idHelper }})
     .then(
-           () => {
-        console.log('Task added!')
-        response.status(200).json({"result":"Task added!"});
+           (task) => {
+               if (task != null){
+                console.log('Task added!')
+                response.status(200).json({"result":"Task added!"})
+               }
+               else {
+                console.log('Task already taken!')
+                response.status(400).json({"result":"Task already taken"})
+               }
     }
           ).catch(
                   (error) => {
