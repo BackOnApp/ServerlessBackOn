@@ -57,14 +57,14 @@ module.exports = (request, response) => {
         devices: new Map(),
         phoneNumber: request.body.phone_number
         });
-        var token=request.body.deviceToken;
+        //var token=request.body.deviceToken;
         
         if (user != null)
             mongoInterface.User.findOne({email : user.email})
             .then(
                   (existentuser) => {
                 if (existentuser != null) {
-                    if(token != null){
+                    /*if(token != null){
                         existentuser.devices.set(token, Date.now());
                         mongoInterface.User.updateOne({_id : ObjectId(existentuser._id)}, {$set: { "devices" : existentuser.devices}},
                                                       function (error, raw) {
@@ -74,15 +74,15 @@ module.exports = (request, response) => {
                                 console.log("Token updated: " + raw);
                             }
                         });
-                    }
+                    }*/
                     response.status(200).json({_id: existentuser._id});
                     
                     user = null;
                 } else {
                     console.log("Registering "+user);
-                    if (token != null){
+                    /*if (token != null){
                         user.devices.set(token, Date.now());
-                    }
+                    }*/
                     user.save()
                     .then(
                           result => {
