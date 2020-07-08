@@ -17,7 +17,7 @@ module.exports = (request, response) => {
         spherical: true,
         query: { helperID: null, neederID: {$ne : ObjectId(id)} },
         distanceField: "distance",
-        maxDistance: 7500
+        maxDistance: 750000
      }
     },
     {
