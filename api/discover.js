@@ -14,7 +14,6 @@ module.exports = (request, response) => {
     {
       $geoNear: {
         near: { type: "Point", coordinates: [ request.body.longitude, request.body.latitude] },
-        spherical: true,
         query: { helperID: null, neederID: {$ne : ObjectId(id)} },
         distanceField: "distance",
         maxDistance: 750000
