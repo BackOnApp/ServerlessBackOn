@@ -26,8 +26,9 @@ module.exports = (request, response) => {
                 response.status(200)
             }
                   )
+        } else{
+            response.status(200)
         }
-        response.status(200)
     }
     
           )
