@@ -9,7 +9,7 @@ var dictionary = {
   "Grocery Shopping" : [2.5, 0, 7.5, 0],
   "Houseworks" : [2.5, 7.5, 0, 0],
   "Pet Caring" : [2.5, 5.5, 2, 0],
-  "Ride to a Doctor's Appointment" : [4.5, 0, 3.5, 2],
+  "Ride to the Doctor" : [4.5, 0, 3.5, 2],
   "Sharing Time" : [5, 0, 0, 5],
   "Study Support" : [3, 0, 0, 7],
   "Tech Assistance" : [2, 0, 0, 8],
