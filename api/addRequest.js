@@ -10,7 +10,8 @@ module.exports = (request, response) => {
     location: {type: "Point", coordinates: [request.body.longitude, request.body.latitude]},
     helperID: null,
     helperReport: null,
-    neederReport: null
+    neederReport: null,
+    lastModified: new Date()
   });
   task.save()
   .then(

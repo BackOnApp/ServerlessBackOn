@@ -7,7 +7,7 @@ module.exports = (request, response) => {
         response.status(400);
         return;
     }
-    mongoInterface.Task.findByIdAndUpdate(id, {'$set': {helperID : null}})
+    mongoInterface.Task.findByIdAndUpdate(id, {'$set': {helperID : null, lastModified: new Date()}})
     .then(
            () => {
         console.log('Task removed!')

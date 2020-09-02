@@ -11,7 +11,7 @@ module.exports = (request, response) => {
         });
         return;
     }
-    mongoInterface.Task.findOneAndUpdate({_id: id, helperID : null}, { $set: { helperID : idHelper }})
+    mongoInterface.Task.findOneAndUpdate({_id: id, helperID : null}, { $set: { helperID : idHelper , lastModified: new Date()}})
     .then(
            (task) => {
                if (task != null){

@@ -113,6 +113,7 @@ module.exports = (request, response) => {
     }).then(() => {
       console.log(changes)
       if (changes != {}) {
+        changes["lastModified"] = new Date()
         mongoInterface.User.updateOne({_id : ObjectId(body._id)}, {'$set': changes}, {new: true}).then(
              (resolveMessage) => {
               console.log('Successfully updated database entry!')
