@@ -29,7 +29,7 @@ const taskSchema = mongoose.Schema({
   helperID: { type: ObjectId, required: false},
   helperReport: { type: String, required: false},
   neederReport: { type: String, required: false},
-  lastModified: { type: Date, default: null, required: true}
+  lastModified: { type: Date, default: new Date(), required: true}
 });
 const userSchema = mongoose.Schema({
   name: { type: String, required: true},
@@ -38,7 +38,7 @@ const userSchema = mongoose.Schema({
   photo: { type: String, required: false},
   devices: { type: Map, of:Date, required: true },
   phoneNumber: { type: String, required: false },
-  lastModified: { type: Date, default: null, required: true}
+  lastModified: { type: Date, default: new Date(), required: true}
 });
 userSchema.plugin(uniqueValidator);
 const soulSchema = mongoose.Schema({
