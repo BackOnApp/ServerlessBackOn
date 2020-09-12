@@ -68,11 +68,7 @@ module.exports = (request, response) => {
                         name: existentuser.name,
                         surname: existentuser.surname,
                         photo: existentuser.photo,
-                        phoneNumber: existentuser.phoneNumber,
-                        caregiver: userSoul.caregiver,
-                        housekeeper: userSoul.housekeeper,
-                        runner: userSoul.runner,
-                        smartassistant: userSoul.smartassistant
+                        phoneNumber: existentuser.phoneNumber
                     });
                     
                     user = null;
@@ -90,11 +86,7 @@ module.exports = (request, response) => {
                                     name: result.name,
                                     surname: result.surname,
                                     photo: result.photo,
-                                    phoneNumber: result.phoneNumber,
-                                    caregiver: userSoul.caregiver,
-                                    housekeeper: userSoul.housekeeper,
-                                    runner: userSoul.runner,
-                                    smartassistant: userSoul.smartassistant
+                                    phoneNumber: result.phoneNumber
                                 });
                             
                         }
