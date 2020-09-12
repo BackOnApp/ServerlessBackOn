@@ -86,11 +86,11 @@ module.exports = (request, response) => {
                         .then(
                             () =>{
                                 response.status(200).json({
-                                    _id: existentuser._id,
-                                    name: existentuser.name,
-                                    surname: existentuser.surname,
-                                    photo: existentuser.photo,
-                                    phoneNumber: existentuser.phoneNumber,
+                                    _id: result._id,
+                                    name: result.name,
+                                    surname: result.surname,
+                                    photo: result.photo,
+                                    phoneNumber: result.phoneNumber,
                                     caregiver: userSoul.caregiver,
                                     housekeeper: userSoul.housekeeper,
                                     runner: userSoul.runner,
